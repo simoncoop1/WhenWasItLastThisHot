@@ -38,7 +38,15 @@ class PlaceholderFragment : Fragment() {
             textView.text = it
         })
 
-        root.findViewById<EditText>(R.id.editTextTemp)
+        val tE = root.findViewById<EditText>(R.id.editTextTemp)
+        Log.i("myLog", tE.toString())
+        tE.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                Log.i("myLog", "Here you can write the code")
+                return@OnEditorActionListener true
+            }
+            false
+        })
 
         return root
     }

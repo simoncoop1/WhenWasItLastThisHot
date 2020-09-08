@@ -11,6 +11,7 @@ import com.example.whenwasitlastthishot.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -33,24 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         val asection = sectionsPagerAdapter.getItem(0)
 
-        val TempI  = findViewById<EditText>(R.id.editTextTemp)
-        Log.i("myLog", TempI.toString())
-        TempI.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                Log.i("myLog", "Here you can write the code")
-                return@OnEditorActionListener true
-            }
-            false
-        })
-
-
-
-
-
-
         //Log.i("myLog", foos.toString())
-        val even: Array<Array<String?>> = arrayOf(arrayOf("2", "4"))
-
-
+        val even: Array<Array<String?>> = arrayOf(arrayOf("2", "4"), arrayOf("2", "4"))
     }
 }
