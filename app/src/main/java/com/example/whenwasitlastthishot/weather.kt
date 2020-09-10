@@ -7,7 +7,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
 
-class weather {
+class weather(val Temps : JSONArray) {
     val even: Array<Array<String?>> = arrayOf(arrayOf("1878", "1","66","43","125","67","175","163","187","215","175","141","78","46"),
         arrayOf("1878", "2","74","45","118","71","193","153","158","222","190","136","78","43"),
         arrayOf("1878", "3","87","51","122","75","150","177","180","195","198","171","81","38"),
@@ -22,14 +22,67 @@ class weather {
         arrayOf("1878", "12","37","60","97","157","195","161","170","205","183","169","55","-12"))
 
 
-
-
     fun GetMostRecentThisHot(t : Float): Calendar{
         //work out the date when it was last this hot
 
         //the date when this last occurred
         val calendar = Calendar.getInstance()
         calendar.set(1750,1,12)
+
+        Log.d("MyLog", Temps.length().toString());
+
+        for (i in Temps.length()-1 downTo 0 step 31){
+            //Log.d("MyLog", i.toString());
+        }
+
+        for(j in 13 downTo 2 step 1) {
+            //Log.d("MyLog", j.toString());
+        }
+
+        for (k in 30 downTo 0 step 1) {
+            //Log.d("MyLog", k.toString());
+
+        }
+
+        for (i in Temps.length()-1 downTo 0 step 31){
+            for(j in i downTo (i-30) step 1) {
+                //Log.d("MyLog", j.toString()+ " " +i.toString());
+            }
+        }
+
+
+        for (i in (Temps.length()-1) downTo  0 step 31) {
+            for(j in 13 downTo 2 step 1) {
+                for (k in i downTo  (i - 30) step 1) {
+                    //val item = Temps.getJSONArray(k).getJSONObject(j)
+                    //Log.d("MyLog", item.toString());
+                    if (i > 4000) {
+                        Log.d("MyLog", i.toString() + " " + k.toString() + " " + j.toString())
+                    }
+                }
+            }
+
+
+            // Your code here
+        }
+
+        return calendar
+    }
+
+    fun GetEarliestYear(): Int{
+
+        val k  = (Temps[0] as JSONArray)[0]
+
+        Log.d("MyLog", k.toString());
+
+        return k.toString().toInt()
+    }
+
+    //so If you got a value in the Json object you can
+    //treat it like a 2D array to obtain the date at that location
+    fun GetADateFrom2DCOORD(x:Int ,y:Int):Calendar{
+
+        val calendar = Calendar.getInstance()
 
         return calendar
     }
