@@ -26,8 +26,8 @@ class weather(val Temps : JSONArray) {
         //work out the date when it was last this hot
 
         //the date when this last occurred
-        val calendar = Calendar.getInstance()
-        calendar.set(1750,1,12)
+        //val calendar = Calendar.getInstance()
+        //calendar.set(1750,1,12)
 
         Log.d("MyLog", Temps.length().toString());
 
@@ -50,23 +50,38 @@ class weather(val Temps : JSONArray) {
             }
         }
 
-
         for (i in (Temps.length()-1) downTo  0 step 31) {
             for(j in 13 downTo 2 step 1) {
                 for (k in i downTo  (i - 30) step 1) {
                     //val item = Temps.getJSONArray(k).getJSONObject(j)
                     //Log.d("MyLog", item.toString());
-                    if (i > 4000) {
-                        Log.d("MyLog", i.toString() + " " + k.toString() + " " + j.toString())
+                    //if (i > 4000) {
+                    //    Log.d("MyLog", i.toString() + " " + k.toString() + " " + j.toString())
+                    //}
+
+                    //val p = Temps.getJSONArray(k).getInt(j)
+                    //Log.d("MyLog", p.toString());
+
+                    //find first value higher
+                    val pT =Temps.getJSONArray(k).getInt(j)
+                    if(pT == -999) continue //equivalent to null, can skip
+                    if(ConvSourceTemp(pT) > t){
+                        //first hottest temp found
+                        return  GetADateFrom2DCOORD(j,k) //return date of discovered value
                     }
+
+
+                    //write a test case
                 }
             }
+
 
 
             // Your code here
         }
 
-        return calendar
+        //reach here means provided temp is hottest on record
+        return Calendar.getInstance()
     }
 
     fun GetEarliestYear(): Int{
@@ -82,11 +97,26 @@ class weather(val Temps : JSONArray) {
     //treat it like a 2D array to obtain the date at that location
     fun GetADateFrom2DCOORD(x:Int ,y:Int):Calendar{
 
+        val year =Temps.getJSONArray(y).getInt(0)
+        val day = Temps.getJSONArray(y).getInt(1)
+        val month = x - 1
+
         val calendar = Calendar.getInstance()
+        calendar.set(year,month,day)
 
         return calendar
     }
 
-    fun LoadTemps(){
+    //convert the source temp by dividing by 10
+    fun ConvSourceTemp(t : Int):Float {
+        val t2 = t / 10f
+        return t2
     }
+
+    //test case
+    //the tempterature is 25 1/3/2020, when was it last this hot
+    fun Test(){
+
+    }
+
 }

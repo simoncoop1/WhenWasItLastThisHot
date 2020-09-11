@@ -1,6 +1,5 @@
 package com.example.whenwasitlastthishot
 
-import android.content.res.Resources
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +11,7 @@ import com.google.android.material.tabs.TabLayout
 import org.json.JSONArray
 import java.io.BufferedReader
 import java.io.InputStreamReader
-
+import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -42,14 +41,14 @@ class MainActivity : AppCompatActivity() {
         val allText = rawResource.bufferedReader().use(BufferedReader::readText)
 
         val obj = JSONArray(allText)
-        //Log.d("MyLog", obj.toString());
-        //Log.d("MyLog", (obj[0] as JSONArray)[2].toString());
         val v = weather(obj)
         v.GetEarliestYear()
-        v.GetMostRecentThisHot(20f)
-
-
+        val aDate = v.GetMostRecentThisHot(20f)
+        Log.d("MyLog", aDate.toString());
+        //val month = aDate.get(Calendar.MONTH)
+        // val monthS = aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault())
+        //Log.d("MyLog", monthS.toString());
         //Log.i("myLog", foos.toString())
-        val even: Array<Array<String?>> = arrayOf(arrayOf("2", "4"), arrayOf("2", "4"))
+        //val even: Array<Array<String?>> = arrayOf(arrayOf("2", "4"), arrayOf("2", "4"))
     }
 }
