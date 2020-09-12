@@ -43,12 +43,14 @@ class MainActivity : AppCompatActivity() {
         val obj = JSONArray(allText)
         val v = weather(obj)
         v.GetEarliestYear()
-        val aDate = v.GetMostRecentThisHot(20f)
+        val aDate = v.GetMostRecentThisHot(32f)
         Log.d("MyLog", aDate.toString());
+        Log.d("MyLog",v.PrintCalendar(aDate));
         //val month = aDate.get(Calendar.MONTH)
         // val monthS = aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault())
         //Log.d("MyLog", monthS.toString());
         //Log.i("myLog", foos.toString())
         //val even: Array<Array<String?>> = arrayOf(arrayOf("2", "4"), arrayOf("2", "4"))
+
     }
 }

@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.whenwasitlastthishot.R
+import java.text.MessageFormat
 
 /**
  * A placeholder fragment containing a simple view.
@@ -43,10 +45,25 @@ class PlaceholderFragment : Fragment() {
         tE.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i("myLog", "Here you can write the code")
+                val tv = root.findViewById<TextView>(R.id.textView)
+                tv.text = context?.resources?.getString(R.string.temp)
                 return@OnEditorActionListener true
             }
             false
         })
+
+        val bu = root.findViewById<Button>(R.id.button)
+        bu.setOnClickListener {
+            // Do something in response to button click
+            Log.i("myLog", "Button. Here you can write the code")
+            val tv = root.findViewById<TextView>(R.id.textView)
+            tv.text = context?.resources?.getString(R.string.temp)
+            //"<h1>Hello {0}. Your age is {1,integer}</h1>"
+            //val result = MessageFormat.format(theString, name, age);
+        }
+
+
+
 
         return root
     }

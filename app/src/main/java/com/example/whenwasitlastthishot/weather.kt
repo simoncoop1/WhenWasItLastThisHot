@@ -84,6 +84,22 @@ class weather(val Temps : JSONArray) {
         return Calendar.getInstance()
     }
 
+    fun GetMostRecentThisCold(t : Float): Calendar{
+        for (i in (Temps.length()-1) downTo  0 step 31) {
+            for(j in 13 downTo 2 step 1) {
+                for (k in i downTo  (i - 30) step 1) {
+                    val pT =Temps.getJSONArray(k).getInt(j)
+                    if(pT == -999) continue //equivalent to null, can skip
+                    if(ConvSourceTemp(pT) < t){
+                        return  GetADateFrom2DCOORD(j,k) //return date of discovered value
+                    }
+                }
+            }
+        }
+        //reach here means provided temp is hottest on record
+        return Calendar.getInstance()
+    }
+
     fun GetEarliestYear(): Int{
 
         val k  = (Temps[0] as JSONArray)[0]
@@ -102,7 +118,7 @@ class weather(val Temps : JSONArray) {
         val month = x - 1
 
         val calendar = Calendar.getInstance()
-        calendar.set(year,month,day)
+        calendar.set(year,month-1,day)
 
         return calendar
     }
@@ -117,6 +133,14 @@ class weather(val Temps : JSONArray) {
     //the tempterature is 25 1/3/2020, when was it last this hot
     fun Test(){
 
+    }
+
+    fun PrintCalendar(c : Calendar):String{
+        val month = c.get(Calendar.MONTH)+1
+        val year = c.get(Calendar.YEAR)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        return year.toString() + "/" + month.toString() + "/" + day.toString()
     }
 
 }
