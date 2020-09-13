@@ -69,7 +69,8 @@ class PlaceholderFragment : Fragment() {
             val allText = rawResource.bufferedReader().use(BufferedReader::readText)
             val obj = JSONArray(allText)
             val v = weather(obj)
-            val aDate = v.GetMostRecentThisHot(32f)
+            val input = tE.text.toString().toFloat()
+            val aDate = v.GetMostRecentThisHot(input)
 
             val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
                 aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
