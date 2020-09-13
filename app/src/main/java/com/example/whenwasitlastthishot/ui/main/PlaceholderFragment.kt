@@ -13,7 +13,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.whenwasitlastthishot.R
+import com.example.whenwasitlastthishot.weather
+import org.json.JSONArray
+import java.io.BufferedReader
+import java.io.InputStreamReader
 import java.text.MessageFormat
+import java.util.*
 
 /**
  * A placeholder fragment containing a simple view.
@@ -57,15 +62,34 @@ class PlaceholderFragment : Fragment() {
             // Do something in response to button click
             Log.i("myLog", "Button. Here you can write the code")
             val tv = root.findViewById<TextView>(R.id.textView)
-            tv.text = context?.resources?.getString(R.string.temp)
-            //"<h1>Hello {0}. Your age is {1,integer}</h1>"
-            //val result = MessageFormat.format(theString, name, age);
+
+            //do the calculate
+            val rawResource  = getResources().openRawResource(R.raw.temperature);
+            val r = BufferedReader(InputStreamReader(rawResource))
+            val allText = rawResource.bufferedReader().use(BufferedReader::readText)
+            val obj = JSONArray(allText)
+            val v = weather(obj)
+            val aDate = v.GetMostRecentThisHot(32f)
+
+            val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
+                aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
+                aDate.get(Calendar.DAY_OF_MONTH),
+                getDaySuffix(aDate.get(Calendar.DAY_OF_MONTH)),
+                aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()),
+                aDate.get(Calendar.YEAR).toString());
+            tv.text = result
         }
 
-
-
-
         return root
+    }
+
+    fun getDaySuffix(day : Int): String?{
+        return if(day == 1 || day == 21 || day == 31)
+            context?.resources?.getString(R.string.daySuffix_st)
+        else if(day == 2 || day == 22) {
+            context?.resources?.getString(R.string.daySuffix_nd)
+        } else
+            context?.resources?.getString(R.string.daySuffix_th)
     }
 
     companion object {

@@ -2,5 +2,9 @@
     <string name="app_name">WhenWasItLastThisHot</string>
     <string name="tab_text_1">Tab 1</string>
     <string name="tab_text_2">Tab 2</string>
-    <string name="temp">The time is was last hot is</string>
+    <string name="temp">{0}, {1}{2} {3} {4}</string>
+    <string name="daySuffix_st">st</string>
+    <string name="daySuffix_nd">nd</string>
+    <string name="daySuffix_th">th</string>
+
 </resources>
