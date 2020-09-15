@@ -44,14 +44,12 @@ class PlaceholderFragment : Fragment() {
         pageViewModel.text.observe(this, Observer<String> {
             textView.text = it
         })
-
         val tE = root.findViewById<EditText>(R.id.editTextTemp)
         Log.i("myLog", tE.toString())
         tE.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 Log.i("myLog", "Here you can write the code")
-                val tv = root.findViewById<TextView>(R.id.textView)
-                tv.text = context?.resources?.getString(R.string.temp)
+                buttonClick(root)
                 return@OnEditorActionListener true
             }
             false
@@ -60,25 +58,7 @@ class PlaceholderFragment : Fragment() {
         val bu = root.findViewById<Button>(R.id.button)
         bu.setOnClickListener {
             // Do something in response to button click
-            Log.i("myLog", "Button. Here you can write the code")
-            val tv = root.findViewById<TextView>(R.id.textView)
-
-            //do the calculate
-            val rawResource  = getResources().openRawResource(R.raw.temperature);
-            val r = BufferedReader(InputStreamReader(rawResource))
-            val allText = rawResource.bufferedReader().use(BufferedReader::readText)
-            val obj = JSONArray(allText)
-            val v = weather(obj)
-            val input = tE.text.toString().toFloat()
-            val aDate = v.GetMostRecentThisHot(input)
-
-            val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
-                aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
-                aDate.get(Calendar.DAY_OF_MONTH),
-                getDaySuffix(aDate.get(Calendar.DAY_OF_MONTH)),
-                aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()),
-                aDate.get(Calendar.YEAR).toString());
-            tv.text = result
+            buttonClick(root)
         }
 
         return root
@@ -91,6 +71,26 @@ class PlaceholderFragment : Fragment() {
             context?.resources?.getString(R.string.daySuffix_nd)
         } else
             context?.resources?.getString(R.string.daySuffix_th)
+    }
+
+    fun buttonClick(root : View){
+        Log.i("myLog", "Button. Here you can write the code")
+        val tv = root.findViewById<TextView>(R.id.textView)
+        val rawResource  = getResources().openRawResource(R.raw.temperature);
+        val r = BufferedReader(InputStreamReader(rawResource))
+        val allText = rawResource.bufferedReader().use(BufferedReader::readText)
+        val obj = JSONArray(allText)
+        val v = weather(obj)
+        val tE = root.findViewById<EditText>(R.id.editTextTemp)
+        val input = tE.text.toString().toFloat()
+        val aDate = v.GetMostRecentThisHot(input)
+        val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
+            aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
+            aDate.get(Calendar.DAY_OF_MONTH),
+            getDaySuffix(aDate.get(Calendar.DAY_OF_MONTH)),
+            aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()),
+            aDate.get(Calendar.YEAR).toString());
+        tv.text = result
     }
 
     companion object {
