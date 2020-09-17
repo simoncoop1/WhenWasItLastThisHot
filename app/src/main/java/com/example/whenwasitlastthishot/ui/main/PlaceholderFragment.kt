@@ -31,7 +31,6 @@ class PlaceholderFragment : Fragment() {
         super.onCreate(savedInstanceState)
         pageViewModel = ViewModelProviders.of(this).get(PageViewModel::class.java).apply {
             setIndex(arguments?.getInt(ARG_SECTION_NUMBER) ?: 1)
-
         }
     }
 
@@ -39,29 +38,33 @@ class PlaceholderFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        val root = inflater.inflate(R.layout.fragment_main, container, false)
-        val textView: TextView = root.findViewById(R.id.section_label)
-        pageViewModel.text.observe(this, Observer<String> {
-            textView.text = it
-        })
-        val tE = root.findViewById<EditText>(R.id.editTextTemp)
-        Log.i("myLog", tE.toString())
-        tE.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
-            if (actionId == EditorInfo.IME_ACTION_DONE) {
-                Log.i("myLog", "Here you can write the code")
+        if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
+            val root = inflater.inflate(R.layout.fragment_main, container, false)
+            val textView: TextView = root.findViewById(R.id.section_label)
+            pageViewModel.text.observe(this, Observer<String> {
+                textView.text = it
+            })
+            val tE = root.findViewById<EditText>(R.id.editTextTemp)
+            Log.i("myLog", tE.toString())
+            tE.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    Log.i("myLog", "Here you can write the code")
+                    buttonClick(root)
+                    return@OnEditorActionListener true
+                }
+                false
+            })
+            val bu = root.findViewById<Button>(R.id.button)
+            bu.setOnClickListener {
+                // Do something in response to button click
                 buttonClick(root)
-                return@OnEditorActionListener true
             }
-            false
-        })
-
-        val bu = root.findViewById<Button>(R.id.button)
-        bu.setOnClickListener {
-            // Do something in response to button click
-            buttonClick(root)
+            return root
         }
-
-        return root
+        else {
+            val root = inflater.inflate(R.layout.cold_fragment_, container, false)
+            return root
+        }
     }
 
     fun getDaySuffix(day : Int): String?{
