@@ -93,7 +93,7 @@ class PlaceholderFragment : Fragment() {
             })
 
             //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={your api key}
-            //http://api.openweathermap.org/data/2.5/weather?q=coventry&appid=d72dac2ed1f7554c00a01c172865f48d&units=metric
+            //http://api.openweathermap.org/data/2.5/weather?q=coventry&appid={key}&units=metric
             /*val url = "http://my-json-feed"
 
             val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
