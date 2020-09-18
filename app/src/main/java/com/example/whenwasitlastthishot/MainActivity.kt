@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
 
 
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "recorded at Hadcet, 1/1/1878 to 31/8/2020", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 

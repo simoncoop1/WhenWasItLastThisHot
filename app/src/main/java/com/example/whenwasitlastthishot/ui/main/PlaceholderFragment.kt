@@ -38,7 +38,8 @@ class PlaceholderFragment : Fragment() {
             inflater: LayoutInflater, container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View? {
-        if (arguments?.getInt(ARG_SECTION_NUMBER) == 1) {
+        val tab = arguments?.getInt(ARG_SECTION_NUMBER)
+        if ( tab == 1) {
             val root = inflater.inflate(R.layout.fragment_main, container, false)
             val textView: TextView = root.findViewById(R.id.section_label)
             pageViewModel.text.observe(this, Observer<String> {
@@ -61,8 +62,54 @@ class PlaceholderFragment : Fragment() {
             }
             return root
         }
-        else {
+        else if(tab == 2){
             val root = inflater.inflate(R.layout.cold_fragment_, container, false)
+            val textView: TextView = root.findViewById(R.id.section_label)
+            pageViewModel.text.observe(this, Observer<String> {
+                textView.text = it
+            })
+            val tE = root.findViewById<EditText>(R.id.editTextTemp)
+            Log.i("myLog", tE.toString())
+            tE.setOnEditorActionListener(TextView.OnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    Log.i("myLog", "Here you can write the code")
+                    coldButtonClick(root)
+                    return@OnEditorActionListener true
+                }
+                false
+            })
+            val bu = root.findViewById<Button>(R.id.button)
+            bu.setOnClickListener {
+                // Do something in response to button click
+                coldButtonClick(root)
+            }
+            return root
+        }
+        else{
+            val root = inflater.inflate(R.layout.about_fragment_, container, false)
+            val textView: TextView = root.findViewById(R.id.section_label)
+            pageViewModel.text.observe(this, Observer<String> {
+                textView.text = it
+            })
+
+            //api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={your api key}
+            //http://api.openweathermap.org/data/2.5/weather?q=coventry&appid=d72dac2ed1f7554c00a01c172865f48d&units=metric
+            /*val url = "http://my-json-feed"
+
+            val jsonObjectRequest = JsonObjectRequest(Request.Method.GET, url, null,
+                Response.Listener { response ->
+                    textView.text = "Response: %s".format(response.toString())
+                },
+                Response.ErrorListener { error ->
+                    // TODO: Handle error
+                }
+            )
+
+            Access the RequestQueue through your singleton class.
+                        MySingleton.getInstance(this).addToRequestQueue(jsonObjectRequest)
+
+        */
+
             return root
         }
     }
@@ -87,6 +134,26 @@ class PlaceholderFragment : Fragment() {
         val tE = root.findViewById<EditText>(R.id.editTextTemp)
         val input = tE.text.toString().toFloat()
         val aDate = v.GetMostRecentThisHot(input)
+        val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
+            aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
+            aDate.get(Calendar.DAY_OF_MONTH),
+            getDaySuffix(aDate.get(Calendar.DAY_OF_MONTH)),
+            aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()),
+            aDate.get(Calendar.YEAR).toString());
+        tv.text = result
+    }
+
+    fun coldButtonClick(root : View){
+        Log.i("myLog", "Button. Here you can write the code")
+        val tv = root.findViewById<TextView>(R.id.textView)
+        val rawResource  = getResources().openRawResource(R.raw.temperature);
+        val r = BufferedReader(InputStreamReader(rawResource))
+        val allText = rawResource.bufferedReader().use(BufferedReader::readText)
+        val obj = JSONArray(allText)
+        val v = weather(obj)
+        val tE = root.findViewById<EditText>(R.id.editTextTemp)
+        val input = tE.text.toString().toFloat()
+        val aDate = v.GetMostRecentThisCold(input)
         val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
             aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
             aDate.get(Calendar.DAY_OF_MONTH),

@@ -91,6 +91,7 @@ class weather(val Temps : JSONArray) {
                     val pT =Temps.getJSONArray(k).getInt(j)
                     if(pT == -999) continue //equivalent to null, can skip
                     if(ConvSourceTemp(pT) < t){
+                        Log.d("MyLog", ConvSourceTemp(pT).toString()+"/"+t.toString());
                         return  GetADateFrom2DCOORD(j,k) //return date of discovered value
                     }
                 }
