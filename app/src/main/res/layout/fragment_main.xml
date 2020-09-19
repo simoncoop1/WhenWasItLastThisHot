@@ -24,16 +24,16 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="232dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="48dp"
         android:text="Go"
-        app:layout_constraintStart_toStartOf="@+id/editTextTemp"
+        app:layout_constraintStart_toEndOf="@+id/editTextTemp"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextTemp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="163dp"
+        android:layout_height="51dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="48dp"
         android:ems="10"
@@ -62,5 +62,13 @@
         android:text="This tab is for showing the last date on record which was hotter than the input value. The input value is intended to be the max temperature for current present day. So the date when is was last this hot or hotter."
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Auto Fill"
+        tools:layout_editor_absoluteX="295dp"
+        tools:layout_editor_absoluteY="48dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
