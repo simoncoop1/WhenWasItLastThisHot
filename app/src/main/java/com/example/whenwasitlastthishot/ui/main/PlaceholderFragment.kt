@@ -1,6 +1,9 @@
 package com.example.whenwasitlastthishot.ui.main
 
+import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,10 +18,11 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.whenwasitlastthishot.R
 import com.example.whenwasitlastthishot.weather
 import org.json.JSONArray
-import java.io.BufferedReader
-import java.io.InputStreamReader
+import java.io.*
+import java.net.URL
 import java.text.MessageFormat
 import java.util.*
+
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,8 +39,8 @@ class PlaceholderFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         val tab = arguments?.getInt(ARG_SECTION_NUMBER)
         if ( tab == 1) {
@@ -60,6 +64,26 @@ class PlaceholderFragment : Fragment() {
                 // Do something in response to button click
                 buttonClick(root)
             }
+
+            val autofill = root.findViewById<Button>(R.id.button2)
+            autofill.setOnClickListener {
+
+                if (Build.VERSION.SDK_INT > 9) {
+                    val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+                    StrictMode.setThreadPolicy(policy)
+                }
+
+                // json web request
+                val url = "http://my-json-feed"
+
+                val k = "http://10.0.2.2:3003/url".saveToString()
+                Log.i("myLog", k.toString())
+                autofill.text = k.toString()
+                buttonClick(root)
+
+
+            }
+
             return root
         }
         else if(tab == 2){
@@ -114,7 +138,32 @@ class PlaceholderFragment : Fragment() {
         }
     }
 
-    fun getDaySuffix(day : Int): String?{
+
+
+    fun String.saveToFile(path: String) {
+        URL(this).openStream().use { input ->
+            FileOutputStream(File(path)).use { output ->
+                input.copyTo(output)
+            }
+        }
+    }
+
+    fun String.saveToString():String {
+
+        var k = ""
+        k += " "
+
+        URL(this).openStream().use { input ->
+            ByteArrayOutputStream().use { output ->
+                input.copyTo(output)
+                return output.toString()
+            }
+        }
+
+        return ""
+    }
+
+    fun getDaySuffix(day: Int): String?{
         return if(day == 1 || day == 21 || day == 31)
             context?.resources?.getString(R.string.daySuffix_st)
         else if(day == 2 || day == 22) {
@@ -123,8 +172,8 @@ class PlaceholderFragment : Fragment() {
             context?.resources?.getString(R.string.daySuffix_th)
     }
 
-    fun buttonClick(root : View){
-        Log.i("myLog", "Button. Here you can write the code")
+    fun buttonClick(root: View){
+        Log.i("myLog", "buttonClick method")
         val tv = root.findViewById<TextView>(R.id.textView)
         val rawResource  = getResources().openRawResource(R.raw.temperature);
         val r = BufferedReader(InputStreamReader(rawResource))
@@ -132,18 +181,22 @@ class PlaceholderFragment : Fragment() {
         val obj = JSONArray(allText)
         val v = weather(obj)
         val tE = root.findViewById<EditText>(R.id.editTextTemp)
+        if(tE.text.isEmpty())//empty field case
+            return
         val input = tE.text.toString().toFloat()
         val aDate = v.GetMostRecentThisHot(input)
-        val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
-            aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
+        val result = MessageFormat.format(
+            context?.resources?.getString(R.string.temp),
+            aDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
             aDate.get(Calendar.DAY_OF_MONTH),
             getDaySuffix(aDate.get(Calendar.DAY_OF_MONTH)),
-            aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()),
-            aDate.get(Calendar.YEAR).toString());
+            aDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()),
+            aDate.get(Calendar.YEAR).toString()
+        );
         tv.text = result
     }
 
-    fun coldButtonClick(root : View){
+    fun coldButtonClick(root: View){
         Log.i("myLog", "Button. Here you can write the code")
         val tv = root.findViewById<TextView>(R.id.textView)
         val rawResource  = getResources().openRawResource(R.raw.temperature);
@@ -154,14 +207,17 @@ class PlaceholderFragment : Fragment() {
         val tE = root.findViewById<EditText>(R.id.editTextTemp)
         val input = tE.text.toString().toFloat()
         val aDate = v.GetMostRecentThisCold(input)
-        val result = MessageFormat.format(context?.resources?.getString(R.string.temp),
-            aDate.getDisplayName(Calendar.DAY_OF_WEEK,Calendar.LONG, Locale.getDefault()),
+        val result = MessageFormat.format(
+            context?.resources?.getString(R.string.temp),
+            aDate.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.getDefault()),
             aDate.get(Calendar.DAY_OF_MONTH),
             getDaySuffix(aDate.get(Calendar.DAY_OF_MONTH)),
-            aDate.getDisplayName(Calendar.MONTH,Calendar.LONG, Locale.getDefault()),
-            aDate.get(Calendar.YEAR).toString());
+            aDate.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault()),
+            aDate.get(Calendar.YEAR).toString()
+        );
         tv.text = result
     }
+
 
     companion object {
         /**

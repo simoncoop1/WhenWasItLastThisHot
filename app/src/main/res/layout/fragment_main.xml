@@ -37,7 +37,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="48dp"
         android:ems="10"
-        android:hint="enter todays temperature"
+        android:hint="todays temperature"
         android:imeOptions="actionDone"
         android:inputType="numberSigned"
         app:layout_constraintStart_toStartOf="parent"
@@ -67,8 +67,12 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Auto Fill"
-        tools:layout_editor_absoluteX="295dp"
-        tools:layout_editor_absoluteY="48dp" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Auto"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@+id/button"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
