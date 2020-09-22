@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.text.set
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -74,14 +75,17 @@ class PlaceholderFragment : Fragment() {
                 }
 
                 // json web request
-                val url = "http://my-json-feed"
 
-                val k = "http://10.0.2.2:3003/url".saveToString()
-                Log.i("myLog", k.toString())
-                autofill.text = k.toString()
+                val a = context?.resources?.getString(R.string.owm)
+
+                val url = "http://api.openweathermap.org/data/2.5/weather?q=southam,warwickshire,uk&appid=$a&units=metric"
+                val k = url.saveToString()
+                val obj = JSONArray(k)
+
+                //val k = "http://10.0.2.2:3003/url".saveToString()
+                Log.i("myLog", obj.toString())
+                //tE.setText(k.toString())
                 buttonClick(root)
-
-
             }
 
             return root
