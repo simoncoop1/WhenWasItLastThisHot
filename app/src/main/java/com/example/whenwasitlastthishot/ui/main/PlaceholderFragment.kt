@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.whenwasitlastthishot.R
 import com.example.whenwasitlastthishot.weather
 import org.json.JSONArray
+import org.json.JSONObject
 import java.io.*
 import java.net.URL
 import java.text.MessageFormat
@@ -68,23 +69,16 @@ class PlaceholderFragment : Fragment() {
 
             val autofill = root.findViewById<Button>(R.id.button2)
             autofill.setOnClickListener {
-
                 if (Build.VERSION.SDK_INT > 9) {
                     val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
                     StrictMode.setThreadPolicy(policy)
                 }
-
                 // json web request
-
-                val a = context?.resources?.getString(R.string.owm)
-
-                val url = "http://api.openweathermap.org/data/2.5/weather?q=southam,warwickshire,uk&appid=$a&units=metric"
-                val k = url.saveToString()
-                val obj = JSONArray(k)
-
-                //val k = "http://10.0.2.2:3003/url".saveToString()
-                Log.i("myLog", obj.toString())
-                //tE.setText(k.toString())
+                val akey = context?.resources?.getString(R.string.owm)
+                val url = "http://api.openweathermap.org/data/2.5/weather?q=southam,warwickshire,uk&appid=$akey&units=metric"
+                val jsonObj = JSONObject(url.saveToString())
+                val minTemp = (jsonObj["main"] as JSONObject)["temp_min"] as Double
+                tE.setText(minTemp.toString())
                 buttonClick(root)
             }
 
@@ -142,8 +136,6 @@ class PlaceholderFragment : Fragment() {
         }
     }
 
-
-
     fun String.saveToFile(path: String) {
         URL(this).openStream().use { input ->
             FileOutputStream(File(path)).use { output ->
@@ -152,6 +144,7 @@ class PlaceholderFragment : Fragment() {
         }
     }
 
+    //string extention method to make url request
     fun String.saveToString():String {
 
         var k = ""
@@ -221,7 +214,6 @@ class PlaceholderFragment : Fragment() {
         );
         tv.text = result
     }
-
 
     companion object {
         /**
